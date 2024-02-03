@@ -45,6 +45,20 @@
             border: none;
             border-radius: 4px;
         }
+        #back-button {
+            position: absolute;
+            top: 120px;
+            left: 30px;
+            padding: 5px;
+            font-size: 36px;
+            cursor: pointer;
+            background-color: transparent;
+            color: black;
+            border: none;
+            border-radius: 1px;
+            margin-right: 10px;
+            
+        }
 
         hr {
             border: 1px solid #ccc;
@@ -62,6 +76,7 @@
             margin-top: 20px;
             background-color: rgba(255, 255, 255, 0.8);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
         .video-item {
@@ -106,8 +121,11 @@
 
 <body>
 
-    <div id="header">
-        <h1>YouTube Video Search</h1>
+    <div id="header" >
+        <button id="back-button" onclick="goBack()">🡸
+
+</button>
+        <h1>🆈🅾🆄-🆃🆄🅱🅴</h1>
 
 
         <div id="search-container">
@@ -119,7 +137,7 @@
 
     <hr>
 
-    <div id="cursive-title"> 𒆜🆆🅰🆃🅲🅷 🅰🅳-🅵🆁🅴🅴 🆈🅾🆄🆃🆄🅱🅴 🆅🅸🅳🅴🅾🆂 𒆜</div>
+    <div id="cursive-title"> 𒆜🆆🅰🆃🅲🅷 🅰🅳-🅵🆁🅴🅴 🆈🅾🆄🆃🆄🅱🅴 🆅🅸🅳🅴🅾🆂𒆜</div>
     <div id="top-video-container"></div>
     <div id="video-container"></div>
     <div id="search-results"></div>
@@ -129,6 +147,10 @@
         let currentVideoId = null;
         let nextPageToken = null;
         let isLoading = false;
+
+        function goBack() {
+            window.history.back();
+        }
 
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
