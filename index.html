@@ -19,6 +19,13 @@
             border-radius: 8px 8px 0 0;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+        #youtube-logo {
+            position: absolute;
+            top: 65px;
+            left: 35px;
+            width: 40px; /* Adjust size as needed */
+            height: 40px; /* Adjust size as needed */
+        }
 
         #search-container {
             display: flex;
@@ -57,14 +64,12 @@
             border: none;
             border-radius: 1px;
             margin-right: 10px;
-            
         }
 
         hr {
             border: 1px solid #ccc;
             margin-top: 10px;
             margin-bottom: 20px;
-
         } 
 
         #top-video-container,
@@ -80,15 +85,41 @@
         }
 
         .video-item {
-            width: 100%; /* Full width for one video per row */
-            margin: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            display: inline-block;
-            background-color: white;
-            transition: background-color 0.3s ease;
-        }
+    width: 100%; /* Full width for one video per row by default */
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    display: inline-block;
+    background-color: white;
+    transition: background-color 0.3s ease;
+}
+
+@media (min-width: 600px) {
+    /* Adjust styles for larger screens, e.g., Android devices in portrait mode */
+    .video-item {
+        width: 100%; /* One video per row */
+    }
+}
+
+@media (min-width: 768px) {
+    /* Adjust styles for larger screens, e.g., tablets */
+    .video-item {
+        width: 48%; /* Two videos per row */
+    }
+}
+
+@media (min-width: 1024px) {
+    /* Adjust styles for larger screens, e.g., desktops */
+    .video-item {
+        width: 32%; /* Three videos per row */
+    }
+}
+
+@media (min-width: 1920px) {
+    /* Adjust styles for larger screens, e.g., TVs */
+    .video-item {
+        width: 30%; /* Three videos per row on TV */}}
 
         .video-item:hover {
             background-color: #ecf0f1;
@@ -113,27 +144,23 @@
             font-family: monospace;
             font-size: 20px;
             margin-top: 5px;
-            color:darkmagenta ;
-            animation: forwards; 1s infinite;}
-            <hr>
+            color: darkmagenta;
+            animation: forwards 1s infinite;
+        }
     </style>
 </head>
 
 <body>
 
-    <div id="header" >
+    <div id="header">
+        <img src="https://img.icons8.com/?size=512&id=QyYjooyvYGgV&format=png" alt="YouTube Logo" id="youtube-logo"> <!-- Add your YouTube logo image here -->
         <button id="back-button" onclick="goBack()">🡸</button>
-
-
-</button>
         <h1>🆈𝖔𝖚𝕿𝖚𝖇𝖊</h1>
-
-
         <div id="search-container">
             <input type="text" id="search-box" placeholder="Enter search query..." onkeyup="handleKeyPress(event)">
             <button id="search-button" onclick="searchYouTube()">Search</button>
         </div>
-        
+        <div id="suggestions-container"></div>
     </div>
 
     <hr>
@@ -152,6 +179,10 @@
         function goBack() {
             window.history.back();
         }
+
+        window.onload = function () {
+            loadSuggestions(); // Load suggestions on page load
+        };
 
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
@@ -182,6 +213,7 @@
             const loadingMessageElement = document.getElementById('loading-message');
             loadingMessageElement.style.display = 'none';
         }
+
         function handleInput() {
             clearResults(); // Clear existing results
             debounce(loadSuggestions, 300)();
@@ -226,7 +258,7 @@
             const apiKey = 'AIzaSyCopgJYXntKkxg4nFVkMIju8Xu9tKu4xr0'; // Replace with your YouTube API key
             const maxResults = 5;
 
-            return fetch(`https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&maxResults=${maxResults}&q=${encodeURIComponent(query)}&key=${apiKey}&sugGESTIONS=true`)
+            return fetch(`https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&maxResults=${maxResults}&q=${encodeURIComponent(query)}&key=${apiKey}`)
                 .then(response => response.json())
                 .then(data => {
                     const suggestions = data.items.map(item => item.snippet.title);
@@ -324,21 +356,21 @@
         }
 
         function createVideoItem(item) {
-        const videoItem = document.createElement('div');
-        videoItem.className = 'video-item';
-        const truncatedTitle = item.snippet.title.substring(0, 999); // Display the first 100 characters
-        videoItem.innerHTML = `
-            <img src="${item.snippet.thumbnails.medium.url}" alt="${truncatedTitle}" class="video-thumbnail">
-            <h3 style="font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; margin: 5px 0;">${truncatedTitle}...</h3>
-        `;
-        return videoItem;
+            const videoItem = document.createElement('div');
+            videoItem.className = 'video-item';
+            const truncatedTitle = item.snippet.title.substring(0, 999); // Display the first 100 characters
+            videoItem.innerHTML = `
+                <img src="${item.snippet.thumbnails.medium.url}" alt="${truncatedTitle}" class="video-thumbnail">
+                <h3 style="font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; margin: 5px 0;">${truncatedTitle}...</h3>
+            `;
+            return videoItem;
         }
 
         function scrollToPlayer() {
             const playerContainer = document.getElementById('top-video-container');
             playerContainer.scrollIntoView({ behavior: 'smooth' });
         }
-        
+
         window.onscroll = function () {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && !isLoading) {
                 loadMoreResults();
