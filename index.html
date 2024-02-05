@@ -9,8 +9,9 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 1px;
+            padding: 0px;
             background-color: #f0f0f0;
+
         }
 
         #header {
@@ -51,15 +52,7 @@
             border-radius: 15px;
         }
 
-        #search-button {
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 15px;
-        }
+        
 
         
         #back-button {
@@ -168,8 +161,8 @@
         <h1>🆈𝖔𝖚𝕿𝖚𝖇𝖊</h1>
         <div id="search-container">
     <input type="text" id="search-box" placeholder="Enter search query..." onkeyup="handleKeyPress(event)">
-    <button id="voice-search-button" onclick="startVoiceSearch()">🎙️</button>
-    <button id="search-button" onclick="searchYouTube()">Go</button>
+    <button id="voice-search-button" onclick="startVoiceSearch()">🎙</button>
+    
 </div>
         <div id="suggestions-container"></div>
     </div>
