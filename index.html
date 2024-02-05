@@ -9,7 +9,7 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 20px;
+            padding: 1px;
             background-color: #f0f0f0;
         }
 
@@ -23,19 +23,32 @@
         }
 
         #search-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+}
+
 
         #search-box {
-            width: 250px;
+        width: 250px;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
+        margin-right: 5px;
+        position: relative;
+}
+
+        #voice-search-button {
             padding: 10px;
             font-size: 16px;
+            cursor: pointer;
+            background-color: transparent;
+            color: black;
             border: none;
             border-radius: 15px;
-            box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
-            margin-right: 5px; /* Adjust margin for spacing */
         }
 
         #search-button {
@@ -47,6 +60,8 @@
             border: none;
             border-radius: 15px;
         }
+
+        
         #back-button {
             position: absolute;
             top: 20px;
@@ -152,9 +167,10 @@
         <button id="back-button" onclick="goBack()">🡸</button>
         <h1>🆈𝖔𝖚𝕿𝖚𝖇𝖊</h1>
         <div id="search-container">
-            <input type="text" id="search-box" placeholder="Enter search query..." onkeyup="handleKeyPress(event)">
-            <button id="search-button" onclick="searchYouTube()">Go</button>
-        </div>
+    <input type="text" id="search-box" placeholder="Enter search query..." onkeyup="handleKeyPress(event)">
+    <button id="voice-search-button" onclick="startVoiceSearch()">🎙️</button>
+    <button id="search-button" onclick="searchYouTube()">Go</button>
+</div>
         <div id="suggestions-container"></div>
     </div>
 
@@ -168,6 +184,27 @@
         let currentVideoId = null;
         let nextPageToken = null;
         let isLoading = false;
+
+        function startVoiceSearch() {
+        const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.start();
+
+        recognition.onresult = function (event) {
+            const speechToText = event.results[0][0].transcript;
+            document.getElementById('search-box').value = speechToText;
+            searchYouTube();
+        };
+
+        recognition.onerror = function (event) {
+            console.error('Speech recognition error:', event.error);
+        };
+
+        recognition.onend = function () {
+            console.log('Speech recognition ended.');
+        };
+    }
+
 
         function goBack() {
             window.history.back();
